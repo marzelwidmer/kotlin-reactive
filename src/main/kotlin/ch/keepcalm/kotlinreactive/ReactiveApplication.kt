@@ -3,6 +3,8 @@ package ch.keepcalm.kotlinreactive
 import org.reactivestreams.Publisher
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder
+import org.springframework.cloud.gateway.route.builder.routes
 import org.springframework.context.support.beans
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToFlux
@@ -33,14 +35,27 @@ fun main(args: Array<String>) {
                                             .get()
                                             .retrieve()
                                             .bodyToFlux<Info>()
-                                            .map { it.profile  }
+                                            .map { it.profile }
 
                             ServerResponse.ok().body(profiles)
                         }
                     }
                 }
+
+                bean {
+                    val builder = ref<RouteLocatorBuilder>()
+                    builder.routes {
+                        route {
+                            path("/proxy")
+                            uri("http://localhost:8080/actuator/info")
+//    service discovery  uri("lb:/my-service/info")
+                        }
+                    }
+
+                }
+
             })
             .run(*args)
 }
 
-class Info (val profile: String?)
+class Info(val profile: String?)
