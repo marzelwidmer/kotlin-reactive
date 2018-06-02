@@ -46,7 +46,8 @@ fun main(args: Array<String>) {
                     val builder = ref<RouteLocatorBuilder>()
                     builder.routes {
                         route {
-                            path("/proxy")
+//                            host("*.foo.com") and
+                                    path("/proxy")
                             uri("http://localhost:8080/actuator/info")
 //    service discovery  uri("lb:/my-service/info")
                         }
