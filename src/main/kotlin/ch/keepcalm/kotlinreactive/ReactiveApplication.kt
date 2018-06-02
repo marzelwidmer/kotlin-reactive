@@ -1,11 +1,18 @@
 package ch.keepcalm.kotlinreactive
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
+import org.springframework.boot.builder.SpringApplicationBuilder
+import org.springframework.context.support.beans
 
 @SpringBootApplication
 class ReactiveApplication
 
 fun main(args: Array<String>) {
-    runApplication<ReactiveApplication>(*args)
+
+    SpringApplicationBuilder()
+            .sources(ReactiveApplication::class.java)
+            .initializers(beans {
+
+            })
+            .run(*args)
 }
