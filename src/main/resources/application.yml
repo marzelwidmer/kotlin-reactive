@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: @project.name@
+  jackson:
+    default-property-inclusion: non_null
+
+
+  profiles.active: default
+
+
+info:
+  profile : ${spring.profiles.active}
+  build:
+    artifact: @project.artifactId@
+    name: @project.name@
+    description: @project.description@
+    version: @project.version@
+
+server:
+  port: 8081
+
+---
+spring:
+  profiles: production
+server:
+  port: 0
