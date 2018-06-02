@@ -3,7 +3,11 @@ package ch.keepcalm.kotlinreactive
 import org.reactivestreams.Publisher
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
+import org.springframework.cloud.gateway.filter.GatewayFilter
+import org.springframework.cloud.gateway.filter.factory.RequestRateLimiterGatewayFilterFactory
+import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder
+import org.springframework.cloud.gateway.route.builder.filters
 import org.springframework.cloud.gateway.route.builder.routes
 import org.springframework.context.support.beans
 import org.springframework.web.reactive.function.client.WebClient
@@ -46,11 +50,20 @@ fun main(args: Array<String>) {
                     val builder = ref<RouteLocatorBuilder>()
                     builder.routes {
                         route {
-//                            host("*.foo.com") and
-                                    path("/proxy")
+                            path("/proxy")
                             uri("http://localhost:8080/actuator/info")
-//    service discovery  uri("lb:/my-service/info")
+                            // uri("lb:/my-service/info") // service discovery url
                         }
+
+//                        route {
+//                            val rl = ref<RequestRateLimiterGatewayFilterFactory>()
+//                            val redisRl = rl.apply(RedisRateLimiter(5, 10))
+//                            path("/rl")
+//                            filters {
+//                                filter(redisRl)
+//                            }
+//                            uri("http:localhost:8080/actuator/info")
+//                        }
                     }
 
                 }
@@ -59,4 +72,5 @@ fun main(args: Array<String>) {
             .run(*args)
 }
 
+x
 class Info(val profile: String?)
